@@ -262,10 +262,11 @@ void exiting()
 	if( guiThreadRunning )
 	{
 		sys_ppu_thread_t threadid;
-		if( sysThreadGetId( &threadid ) && threadid != guiThread )//dont try to join the gui thread if that is the thread that called exit
+		if( !sysThreadGetId( &threadid ) && threadid != guiThread )//dont try to join the gui thread if that is the thread that called exit
 		{
 			ResumeGui();                                //make sure the gui thread is not stuck in wait condition before trying to join
 
+			printf("joining gui thread\n");
 			u64 retval;
 			int t = sysThreadJoin( guiThread, &retval );
 			if( t )

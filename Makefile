@@ -17,9 +17,12 @@ include $(PSL1GHT)/ppu_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source \
-				source/images \
+RESOURCELIST	:= source/resources/resourcelist.cpp
+RESOURCES	:=  source/images \
 				source/sounds
+SOURCES		:=	source \
+				source/resources \
+				$(RESOURCES)
 DATA		:=	data
 INCLUDES	:=	include
 
@@ -44,9 +47,6 @@ LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 AUDIOLIBS	:=  -lspu_sound -laudioplayer -lmpg123 -lvorbisfile -lvorbis -logg -laudio -lspu_soundmodule.bin
 LIBS	:=	$(AUDIOLIBS) -ltiny3d -lfreetype -lz -lrsx -lgcm_sys -lio -lsysutil -lrt -llv2 -lm -lsysfs -lpngdec -ljpgdec -lsysmodule
-
-
-
 
 LIBDIRS	:=	$(PORTLIBS)
 
@@ -90,6 +90,7 @@ endif
 
 export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 					$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) \
+					resourcelist.o \
 					$(sFILES:.s=.o) $(SFILES:.S=.o) \
 					$(PCMFILES:.pcm=.pcm.o) $(PNGFILES:.png=.png.o) \
 					$(OGGFILES:.ogg=.ogg.o) $(MP3FILES:.mp3=.mp3.o) \
@@ -110,17 +111,23 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib) \
 					$(LIBPSL1GHT_LIB)
 
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
-.PHONY: $(BUILD) clean
+.PHONY: $(BUILD) clean resources
 
 #---------------------------------------------------------------------------------
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
+	@$(MAKE) --no-print-directory resources
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).self
+
+
+resources:
+	@./resourceLister $(RESOURCELIST) $(RESOURCES)
+
 
 #---------------------------------------------------------------------------------
 run:

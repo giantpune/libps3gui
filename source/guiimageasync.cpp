@@ -21,7 +21,6 @@ GuiImageAsync::GuiImageAsync( GuiImageData *preload, const string &path, u32 for
 {
 	imgData = NULL;
 	loaded = false;
-	//this->format = format;
 	if( preload )
 		this->format = preload->Format();
 	destFormat = format;
@@ -218,9 +217,6 @@ void GuiImageAsync::ThreadMain( void* arg )
 				RemoveFirstEntry();
 				continue;
 			}
-			//printf("loading with format: %08x target: %08x\n", fmt, target );
-
-
 
 			// try to create imagedata
 			GuiImageData * img = new (std::nothrow) GuiImageData( buf.Data(), buf.Size(), fmt );

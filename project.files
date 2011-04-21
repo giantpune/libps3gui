@@ -109,3 +109,7 @@ source/wavdecoder.cpp
 source/wavdecoder.h
 source/wstring.cpp
 source/wstring.h
+source/resources/resources.h
+source/resources/resources.cpp
+source/resources/resourcelist.h
+source/resources/resourcelist.cpp

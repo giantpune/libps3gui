@@ -24,6 +24,7 @@
 #include "gui.h"
 #include "pad.h"
 #include "menu.h"
+#include "resources/resources.h"
 #include "rsxmem.h"
 #include "settings.h"
 #include "sfo.h"
@@ -65,6 +66,9 @@ s32 main(s32 argc, const char* argv[])
 
 	//setup filebrowser
 	FileBrowser::Init();
+
+	//build list of available resources
+	Resources::Init();
 
 	//start checking for devices
 	DeviceThread::Init();

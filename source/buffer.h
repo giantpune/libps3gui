@@ -13,7 +13,7 @@ public:
 
 	//create a Buffer object with the given data up to the first NULL byte or until len
 	//! this makes a copy of the data
-	explicit Buffer( const u8* stuff = NULL, u32 size = 0 );
+	explicit Buffer( const u8* stuff = (u8*)NULL, u32 size = 0 );
 	Buffer( const Buffer &other );
 
 	//! creates a buffer with the given size
