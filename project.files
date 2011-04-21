@@ -105,8 +105,6 @@ source/utils.cpp
 source/utils.h
 source/video.cpp
 source/video.h
-source/warez.cpp
-source/warez.h
 source/wavdecoder.cpp
 source/wavdecoder.h
 source/wstring.cpp

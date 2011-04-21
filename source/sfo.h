@@ -19,7 +19,7 @@ struct SfoEntry
 class Sfo
 {
 public:
-	enum IdRegion//quick'n'dirty way to get the region from a given ID
+	enum IdRegion//quick'n'dirty(tm) way to get the region from a given ID
 	{
 		Unknown,
 		JAP,

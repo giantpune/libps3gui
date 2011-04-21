@@ -2,6 +2,8 @@
    TINY3D sample / (c) 2010 Hermes  <www.elotrolado.net>
 
 */
+
+#include <iomanip>
 #include <iostream>
 #include <stdio.h>
 #include <malloc.h>
@@ -10,13 +12,8 @@
 #include <unistd.h>
 #include <math.h>
 
-
-
 #include <sysmodule/sysmodule.h>
-
-
 #include <tiny3d.h>
-
 
 #include "buffer.h"
 #include "devicethread.h"
@@ -32,16 +29,7 @@
 #include "stringstuff.h"
 #include "utils.h"
 
-#include <limits>
-#include <iomanip>
-#include "BoxMesh.hpp"
 
-
-/*INC_FILE( PARAM_SFO );
-INC_FILE( PARAM1_SFO );
-INC_FILE( PARAM2_SFO );
-INC_FILE( PARAM3_SFO );
-INC_FILE( PARAM4_SFO );*/
 using namespace std;
 s32 main(s32 argc, const char* argv[])
 {
@@ -86,7 +74,6 @@ s32 main(s32 argc, const char* argv[])
 	InitGuiThread();
 
 	//start looping and crap
-
 	MainMenu( MENU_COVERFLOW );
 
 	exit( 0 );
