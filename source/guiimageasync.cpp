@@ -224,9 +224,14 @@ void GuiImageAsync::ThreadMain( void* arg )
 
 			// try to create imagedata
 			GuiImageData * img = new (std::nothrow) GuiImageData( buf.Data(), buf.Size(), fmt );
-			if( !img
-				|| img->GetRsxTexOffset() == 0xffffffff ) // <- image failed to load, just use the preloaded data
+			if( !img )
 			{
+				RemoveFirstEntry();
+				continue;
+			}
+			if( img->GetRsxTexOffset() == 0xffffffff ) // <- image failed to load, just use the preloaded data
+			{
+				delete img;
 				RemoveFirstEntry();
 				continue;
 			}
