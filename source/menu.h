@@ -35,8 +35,9 @@ void ProgressWindow( const char *title, const char *msg );
 
 int MainMenu( int menu );
 void HaltGui();
-bool ResumeGui();
+void ResumeGui();
 void exiting();
+void DirtyExit();
 void InitGuiThread();
 
 extern sys_mutex_t exitRequestMutex;

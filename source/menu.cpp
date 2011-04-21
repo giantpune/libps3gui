@@ -91,13 +91,18 @@ static void UpdateGui( void* arg )
 	while( 1 )
 	{
 		//check if GuiHalt() has been called
-		sysMutexLock( hGuiMutex, 0 );
+		sysMutexLock( hGuiMutex,  1000 * 1000 );
 		halt = haltgui;
 		sysMutexUnlock( hGuiMutex );
 		if( halt )
 		{
-			while( 1 )
+			bool exit = false;
+			while( !exit )
 			{
+				sysMutexLock( exitRequestMutex,  1000 * 1000 );
+				exit = exitRequested;
+				sysMutexUnlock( exitRequestMutex );
+
 				sysThreadYield();
 				//signal GuiHalt() that this thread has halted
 				if( sysMutexTryLock( h2GuiMutex ) )
@@ -110,7 +115,7 @@ static void UpdateGui( void* arg )
 				if( sysMutexTryLock( wGuiMutex ) )
 					continue;
 				guihalted = true;
-				sysCondWait( guiWaitCondition, 0 );
+				sysCondWait( guiWaitCondition, 1000 * 1000 );
 				guihalted = false;
 				sysMutexUnlock( wGuiMutex );
 
@@ -120,7 +125,7 @@ static void UpdateGui( void* arg )
 		else
 		{
 			//check if exit() has been called
-			sysMutexLock( exitRequestMutex, 0 );
+			sysMutexLock( exitRequestMutex, 1000 * 1000 );
 			bool exit = exitRequested;
 			sysMutexUnlock( exitRequestMutex );
 			if( exit )
@@ -187,8 +192,8 @@ void HaltGui()
 	{
 		if( !++dontfreeze )
 		{
-			printf("HaltGui() failed\n");
-			exit( 0 );
+			printf("HaltGui() threads deadlocked\n");
+			DirtyExit();
 		}
 
 		sysThreadYield();
@@ -211,15 +216,15 @@ void HaltGui()
 	}
 }
 
-bool ResumeGui()
+void ResumeGui()
 {
 	u16 wtf = 1;
 	while( 1 )
 	{
 		if( !wtf++ )
 		{
-			printf("threads deadlocked\n");
-			return false;
+			printf("ResumeGui() threads deadlocked\n");
+			DirtyExit();
 		}
 		sysThreadYield();
 		//signal gui thread to wait
@@ -238,29 +243,35 @@ bool ResumeGui()
 
 		break;
 	}
-	return true;
+}
+
+void DirtyExit()
+{
+	printf("dirty exit\n");
+	_exit( 1 );
 }
 
 void exiting()
 {
 	printf("exiting()...\n");
-	sysMutexLock( exitRequestMutex, 0 );
+	sysMutexLock( exitRequestMutex, 1000 * 1000 );
 	exitRequested = true;						//signal threads to end
 	sysMutexUnlock( exitRequestMutex );
 
 	printf("killing gui thread...\n");
-	if( guiThreadRunning && ResumeGui() )
+	if( guiThreadRunning )
 	{
-		//ResumeGui();                                //make sure the gui thread is not stuck in wait condition before trying to join
+		sys_ppu_thread_t threadid;
+		if( sysThreadGetId( &threadid ) && threadid != guiThread )//dont try to join the gui thread if that is the thread that called exit
+		{
+			ResumeGui();                                //make sure the gui thread is not stuck in wait condition before trying to join
 
-		u64 retval;
-		int t = sysThreadJoin( guiThread, &retval );
-		if( t )
-			printf("gui thread tried to join with return: %llX, sysThreadJoin returned %d\n", (unsigned long long int)retval, t );
-
+			u64 retval;
+			int t = sysThreadJoin( guiThread, &retval );
+			if( t )
+				printf("gui thread tried to join with return: %llX, sysThreadJoin returned %d\n", (unsigned long long int)retval, t );
+		}
 	}
-
-
 	//destroy gui mutexes & wait conditions
 	sysMutexDestroy( exitRequestMutex );
 	sysMutexDestroy( hGuiMutex );

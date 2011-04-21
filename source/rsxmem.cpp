@@ -28,19 +28,8 @@ static u32 *memStart = NULL;
 
 static bool Lock()
 {
-	u16 dontFReeze = 0;
-retry:
-	sysThreadYield();
-
-	// ghetto avoid thread deadlock :)
-	if( !++dontFReeze )
-	{
-		printf("RsxMem::Lock() failed\n" );
+	if( sysMutexLock( rsxMutex, 1000 * 1000 ) )
 		return false;
-	}
-
-	if( sysMutexTryLock( rsxMutex ) )
-		goto retry;
 
 	return true;
 }

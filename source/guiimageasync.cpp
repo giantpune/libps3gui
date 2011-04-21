@@ -73,19 +73,11 @@ bool GuiImageAsync::IsLoaded()
 
 bool GuiImageAsync::Lock()
 {
-	u16 dontFReeze = 0;
-retry:
-	sysThreadYield();
-
-	// ghetto avoid thread deadlock :)
-	if( !++dontFReeze )
+	if( sysMutexLock( dataMutex, 1000 * 1000 ) )
 	{
 		printf("GuiImageAsync::Lock() \"%s\" failed\n", imagePath.c_str() );
 		return false;
 	}
-
-	if( sysMutexTryLock( dataMutex ) )
-		goto retry;
 
 	return true;
 }
@@ -97,19 +89,9 @@ void GuiImageAsync::UnLock()
 
 void GuiImageAsync::AddToList()
 {
-	u32 dontFReeze = 0;
-retry:
-	sysThreadYield();
-
-	// ghetto avoid thread deadlock :)
-	if( !++dontFReeze )
+	if( sysMutexLock( listMutex, 1000 * 1000 ) )
 		return;
 
-	if( sysMutexTryLock( listMutex ) )
-	{
-		usleep( 100 );
-		goto retry;
-	}
 	list.push_back( pair < GuiImageAsync *, u32 >( this, destFormat | target ) );
 	sysMutexUnlock( listMutex );
 }
@@ -119,23 +101,8 @@ void GuiImageAsync::RemoveFromList()
 	if( loaded )//this is already loaded, it shouldnt be in the list anyways
 		return;
 
-	//printf("GuiImageAsync::RemoveFromList()\n");
-	u16 dontFReeze = 0;
-retry:
-	sysThreadYield();
-	// ghetto avoid thread deadlock :)
-	if( !++dontFReeze )
-	{
-		printf( "GuiImageAsync::RemoveFromList() failed\n");
+	if( sysMutexLock( listMutex, 1000 * 1000 ) )
 		return;
-	}
-
-	if( sysMutexTryLock( listMutex ) )
-	{
-		usleep( 100 );
-		goto retry;
-	}
-	//printf("GuiImageAsync::RemoveFromList() locked\n");
 
 	std::vector<pair < GuiImageAsync *, u32 > >::iterator it = list.begin();
 	while( it < list.end() )
@@ -147,7 +114,6 @@ retry:
 		}
 		++it;
 	}
-	//printf("GuiImageAsync::RemoveFromList() unlocked\n");
 	sysMutexUnlock( listMutex );
 }
 
@@ -155,7 +121,6 @@ void GuiImageAsync::InitThread()
 {
 	if( threadInited )
 		return;
-	//u64 thread_arg = 0x1337;
 	u64 priority = 100;
 	size_t stack_size = 0x2000;
 	const char *thread_name = "async image thread";
@@ -165,7 +130,7 @@ void GuiImageAsync::InitThread()
 	mutex_init( &lwMutex );
 	cond_init( &waitCondition, &lwMutex );
 
-	int s = sysThreadCreate(	&workThread, ThreadMain, NULL, priority, stack_size, THREAD_JOINABLE, (char *)thread_name );
+	int s = sysThreadCreate( &workThread, ThreadMain, NULL, priority, stack_size, THREAD_JOINABLE, (char *)thread_name );
 	if( s )
 	{
 		printf("create async thread returned %i.  exiting...\n", s );
@@ -176,38 +141,17 @@ void GuiImageAsync::InitThread()
 
 void GuiImageAsync::WakeThread()
 {
-	u16 dontDeadLock = 0;
-retryLock:
-	sysThreadYield();
-
-	// ghetto avoid thread deadlock :)
-	if( !++dontDeadLock )
-	{
-		printf( "GuiImageAsync::WakeThread() failed\n" );
+	if( sysMutexLock( lwMutex, 1000 * 1000 ) )
 		return;
-	}
 
-	if( sysMutexTryLock( lwMutex ) )
-		goto retryLock;
 	sysCondSignal( waitCondition );
 	sysMutexUnlock( lwMutex );
 }
 
 void GuiImageAsync::RemoveFirstEntry()
 {
-	u16 dontFReeze = 0;
-retry:
-	sysThreadYield();
-
-	// ghetto avoid thread deadlock :)
-	if( !++dontFReeze )
-	{
-		printf( "GuiImageAsync::RemoveFirstEntry() failed\n" );
+	if( sysMutexLock( listMutex, 1000 * 1000 ) )
 		return;
-	}
-
-	if( sysMutexTryLock( listMutex ) )
-		goto retry;
 
 	if( list.size() )
 		list.erase( list.begin() );
@@ -288,19 +232,10 @@ void GuiImageAsync::ThreadMain( void* arg )
 			}
 
 			//see if the first list item is still the one we think it is
-			u16 dontDeadLock = 0;
-retryLock:
-			sysThreadYield();
-			if( !++dontDeadLock )//probably not the best thing to do here
+			if( sysMutexLock( listMutex, 1000 * 1000 ) )
 			{
 				delete img;
-				printf( "GuiImageAsync::ThreadMain(): deadlock.  aborting :(\n");
-				exit( 0 );
-				//sysThreadExit( 0 );
-			}
-			if( sysMutexTryLock( listMutex ) )
-			{
-				goto retryLock;
+				continue;
 			}
 
 			// the first list entry has changed (been deleted) since we got the path
@@ -336,7 +271,7 @@ retryLock:
 		}
 		sysMutexUnlock( listMutex );
 
-		if( !sysMutexLock( lwMutex, 0 ) )
+		if( !sysMutexLock( lwMutex, 1000 * 1000 ) )
 		{
 			sysCondWait( waitCondition, 0 );
 			sysMutexUnlock( lwMutex );

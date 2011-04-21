@@ -177,7 +177,6 @@ void Resume()
 void Init()
 {
 	//thread parameters
-//	void * thread_arg = 0x1337;
 	u64 priority = 200;
 	size_t stack_size = 0x2000;
 	const char *thread_name = "Device Thread";
@@ -237,7 +236,7 @@ vector<string> CurrentDevList()
 
 vector<string> DevicesRemoved( vector<string> &oldList )
 {
-	cout << "DevicesRemoved()" << endl;
+	//cout << "DevicesRemoved()" << endl;
 	vector<string> ret;
 	vector<string>::iterator it = oldList.begin();
 	sysMutexLock( listMutex, 0 );
@@ -256,7 +255,7 @@ vector<string> DevicesRemoved( vector<string> &oldList )
 
 vector<string> DevicesAdded( vector<string> &oldList )
 {
-	cout << "DevicesAdded()" << endl;
+	//cout << "DevicesAdded()" << endl;
 	vector<string> ret;
 	sysMutexLock( listMutex, 0 );
 	vector<string>::iterator it = devList.begin();

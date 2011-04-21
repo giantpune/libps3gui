@@ -3,6 +3,7 @@
 
 */
 
+#include <assert.h>
 #include <iomanip>
 #include <iostream>
 #include <stdio.h>
@@ -39,8 +40,7 @@ s32 main(s32 argc, const char* argv[])
 	Settings::Load();
 
 	//init the sound stuff
-	if( !GuiSound::Init() )
-		exit( 0 );
+	assert( GuiSound::Init() );
 
 	tiny3d_Init( 1024 * 1024 );
 	tiny3d_Project2D();
@@ -51,8 +51,8 @@ s32 main(s32 argc, const char* argv[])
 	PadInit();
 
 	//load fs, png & jpg sprx
-	sysModuleLoad( SYSMODULE_PNGDEC );
-	sysModuleLoad( SYSMODULE_JPGDEC );
+	assert( !sysModuleLoad( SYSMODULE_PNGDEC ) );
+	assert( !sysModuleLoad( SYSMODULE_JPGDEC ) );
 
 	//this allocates the memory heap used to store fonts and textures
 	//! lol @ 156 MiB.  though i dont suppose theres much else that memory needs to be reserved for
