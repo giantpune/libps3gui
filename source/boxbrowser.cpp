@@ -5,7 +5,6 @@
 #include "fileops.h"
 #include "pad.h"
 #include "rsxmem.h"
-#include "warez.h"
 #include "wstring.h"
 
 

@@ -4,9 +4,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sysmodule/sysmodule.h>
-//#include <pngdec/loadpng.h>
-
-//#include <psl1ght/lv2/timer.h>
 
 
 #include "boxbrowser.h"
@@ -21,7 +18,6 @@
 #include "settings.h"
 #include "stringstuff.h"
 #include "utils.h"
-#include "warez.h"
 
 using namespace std;
 extern GuiFont * font;

@@ -31,7 +31,6 @@
 #include "sfo.h"
 #include "stringstuff.h"
 #include "utils.h"
-#include "warez.h"
 
 #include <limits>
 #include <iomanip>
@@ -46,31 +45,10 @@ INC_FILE( PARAM4_SFO );*/
 using namespace std;
 s32 main(s32 argc, const char* argv[])
 {
-
-	/*Sfo sfo;
-	sfo.Load( PARAM_SFO, PARAM_SFO_size ); sfo.Print();
-	sfo.Load( PARAM1_SFO, PARAM1_SFO_size ); sfo.Print();
-	sfo.Load( PARAM2_SFO, PARAM2_SFO_size ); sfo.Print();
-	sfo.Load( PARAM3_SFO, PARAM3_SFO_size ); sfo.Print();
-	sfo.Load( PARAM4_SFO, PARAM4_SFO_size ); sfo.Print();
-	exit( 0 );*/
-
-
-
-
-
-	//////////////////////
 	cout.precision( 2 );
 
 	//init settings to default values and load a settings file from the HDD if it exists
 	Settings::Load();
-
-
-#ifdef WAREZZZ
-	//load payload & whatnot
-	if( !Warez::Init() )
-		exit( 0 );
-#endif
 
 	//init the sound stuff
 	if( !GuiSound::Init() )
