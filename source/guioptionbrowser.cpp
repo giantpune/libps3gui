@@ -16,19 +16,6 @@
 #include "gui.h"
 #include "utils.h"
 
-
-INC_FILE( bg_options_png );
-INC_FILE( bg_options_entry_png );
-INC_FILE( scrollbar_png );
-INC_FILE( scrollbar_arrowdown_png );
-INC_FILE( scrollbar_arrowdown_over_png );
-INC_FILE( scrollbar_arrowup_png );
-INC_FILE( scrollbar_arrowup_over_png );
-
-INC_FILE( button_click_pcm );
-INC_FILE( button_over_pcm );
-INC_FILE( button_over_wav );
-
 #define OPTION_TEXT_COLOR 0xf0f0f0ff
 #define COL_2_START_X	150
 
@@ -179,30 +166,30 @@ GuiOptionBrowser::GuiOptionBrowser(int w, int h, OptionList * l)
     trigA = new GuiTrigger;
     trigA->SetSimpleTrigger( -1, BTN_CROSS_ );
 
-	btnSoundOver = new GuiSound( button_over_wav, button_over_wav_size, SOUND_WAV );
-	btnSoundClick = new GuiSound( button_click_pcm, button_click_pcm_size, SOUND_PCM );
+	btnSoundOver = new GuiSound( Resource( "sounds/button_over.wav" ), SOUND_WAV );
+	btnSoundClick = new GuiSound( Resource( "sounds/button_click.pcm" ), SOUND_PCM );
 	btnSoundClick->SetVolume( 10 );
 
-    bgOptions = new GuiImageData( bg_options_png, bg_options_png_size );
+	bgOptions = new GuiImageData( Resource( "images/bg_options.png" ) );
     bgOptionsImg = new GuiImage(bgOptions);
     bgOptionsImg->SetParent(this);
     bgOptionsImg->SetAlignment( ALIGN_LEFT | ALIGN_MIDDLE );
 
-    bgOptionsEntry = new GuiImageData( bg_options_entry_png, bg_options_entry_png_size );
+	bgOptionsEntry = new GuiImageData( Resource( "images/bg_options_entry.png" ) );
 
-    scrollbar = new GuiImageData( scrollbar_png, scrollbar_png_size );
+	scrollbar = new GuiImageData( Resource( "images/scrollbar.png" ) );
     scrollbarImg = new GuiImage(scrollbar);
     scrollbarImg->SetParent(this);
     scrollbarImg->SetAlignment(ALIGN_RIGHT | ALIGN_TOP);
     scrollbarImg->SetPosition(0, 30);
 
-    arrowDown = new GuiImageData( scrollbar_arrowdown_png, scrollbar_arrowdown_png_size );
+	arrowDown = new GuiImageData( Resource( "images/scrollbar_arrowdown.png" ) );
     arrowDownImg = new GuiImage(arrowDown);
-    arrowDownOver = new GuiImageData( scrollbar_arrowdown_over_png, scrollbar_arrowdown_over_png_size );
+	arrowDownOver = new GuiImageData( Resource( "images/scrollbar_arrowdown_over.png" ) );
     arrowDownOverImg = new GuiImage(arrowDownOver);
-    arrowUp = new GuiImageData( scrollbar_arrowup_png, scrollbar_arrowup_png_size );
+	arrowUp = new GuiImageData( Resource( "images/scrollbar_arrowup.png" ) );
     arrowUpImg = new GuiImage(arrowUp);
-    arrowUpOver = new GuiImageData( scrollbar_arrowup_over_png, scrollbar_arrowup_over_png_size );
+	arrowUpOver = new GuiImageData( Resource( "images/scrollbar_arrowup_over.png" ) );
     arrowUpOverImg = new GuiImage(arrowUpOver);
 
     arrowUpBtn = new GuiButton(arrowUpImg->GetWidth(), arrowUpImg->GetHeight());

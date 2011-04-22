@@ -25,7 +25,9 @@
     <value key="GenericProjectManager.GenericBuildConfiguration.BuildDirectory" type="QString">/media/Jenna/jenna/p/muhGit/libps3gui</value>
     <valuemap key="ProjectExplorer.BuildConfiguration.BuildStep.0" type="QVariantMap">
      <valuelist key="GenericProjectManager.GenericMakeStep.BuildTargets" type="QVariantList"/>
-     <valuelist key="GenericProjectManager.GenericMakeStep.MakeArguments" type="QVariantList"/>
+     <valuelist key="GenericProjectManager.GenericMakeStep.MakeArguments" type="QVariantList">
+      <value type="QString">-j4</value>
+     </valuelist>
      <value key="GenericProjectManager.GenericMakeStep.MakeCommand" type="QString"></value>
      <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">Make</value>
      <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">GenericProjectManager.GenericMakeStep</value>

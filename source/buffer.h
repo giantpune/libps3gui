@@ -24,7 +24,7 @@ public:
 	void Free();
 
 	//returns true if len or ptr is 0
-	bool IsEmpty() { return !( len && ptr ); }
+	bool IsEmpty() const { return !( len && ptr ); }
 
 	//for debugging purposes
 	//! hexdump data to printf, from start to end.
@@ -32,7 +32,7 @@ public:
 	void Dump( u32 start = 0, u32 size = 0 );
 
 	//number of bytes
-	u32 Size() { return len; }
+	u32 Size() const { return len; }
 
 	//access functions to the data
 	u8* Data() { return ptr; }

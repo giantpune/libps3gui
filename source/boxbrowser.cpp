@@ -7,9 +7,6 @@
 #include "rsxmem.h"
 #include "wstring.h"
 
-
-INC_FILE( nocoverFull_png );
-
 #define BUTTON_DELAY	6
 #define MAX_SPEED		6
 
@@ -65,7 +62,7 @@ BoxBrowser::BoxBrowser()
 	CreateMaxtrices();
 
 	//create nocover data
-	noCoverdata = new (std::nothrow) GuiImageData( nocoverFull_png, nocoverFull_png_size, TINY3D_TEX_FORMAT_R5G6B5 );
+	noCoverdata = new (std::nothrow) GuiImageData( Resource( "images/nocoverFull.png" ), TINY3D_TEX_FORMAT_R5G6B5 );
 	if( !noCoverdata )
 	{
 		printf("oh snap! failed to create noCoverdata.  this wont end well\n");

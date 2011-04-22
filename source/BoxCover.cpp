@@ -29,10 +29,6 @@
 #include "rsxmem.h"
 #include "utils.h"
 
-
-INC_FILE( boxBorder_png );
-INC_FILE( boxLogos_png );
-
 #define BOX_ALPHA ((u8)0xe8)
 static GuiImageData *noCoverData = NULL;//this is never allocated, it is just a copy of one created in the boxbrowser
 static GuiImageData *boxBorder = NULL;
@@ -52,8 +48,8 @@ BoxCover::BoxCover()
 	if( !cnt++ )
 	{
 		noCoverData = BoxBrowser::noCoverdata;
-		boxBorder = new (std::nothrow) GuiImageData( boxBorder_png, boxBorder_png_size, TINY3D_TEX_FORMAT_R5G6B5 );
-		boxLogos = new (std::nothrow) GuiImageData( boxLogos_png, boxLogos_png_size, TINY3D_TEX_FORMAT_R5G6B5 );
+		boxBorder = new (std::nothrow) GuiImageData( Resource( "images/boxBorder.png" ), TINY3D_TEX_FORMAT_R5G6B5 );
+		boxLogos = new (std::nothrow) GuiImageData( Resource( "images/boxLogos.png" ), TINY3D_TEX_FORMAT_R5G6B5 );
 		if( !noCoverData || !boxLogos )
 		{
 			printf( "BoxCover::BoxCover(): noCover is NULL.  prepare for crashy-crashy\n");

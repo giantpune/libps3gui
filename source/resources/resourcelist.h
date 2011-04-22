@@ -8,6 +8,8 @@
 
 #include <ppu-types.h>
 
+//typedef std::pair< u8*, u32 > Resource;
+
 // this stuff is for building a list of included resources at compile time and having them
 // accessible by name at runtime
 

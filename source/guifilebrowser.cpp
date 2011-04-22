@@ -7,26 +7,6 @@
 #include "stringstuff.h"
 #include "utils.h"
 
-INC_FILE( button_png );
-INC_FILE( button_over_png );
-
-INC_FILE( button_click_pcm );
-INC_FILE( button_over_pcm );
-//INC_FILE( button_over_wav );
-//INC_FILE( button_click2_wav );
-
-INC_FILE( bg_file_selection_png );
-INC_FILE( bg_file_selection_entry_png );
-INC_FILE( scrollbar_png );
-INC_FILE( scrollbar_arrowdown_png );
-INC_FILE( scrollbar_arrowdown_over_png );
-INC_FILE( scrollbar_arrowup_png );
-INC_FILE( scrollbar_arrowup_over_png );
-INC_FILE( scrollbar_box_png );
-INC_FILE( scrollbar_box_over_png );
-INC_FILE( folder_png );
-
-INC_FILE( filebrowser_textbox_png );
 extern GuiFont * font;
 
 using namespace std;
@@ -51,35 +31,35 @@ GuiFileBrowser::GuiFileBrowser(int w, int h)
 	trigHeldX = new GuiTrigger;
 	trigHeldX->SetHeldTrigger( -1, BTN_CROSS_ );
 
-	btnSoundOver = new GuiSound(button_over_pcm, button_over_pcm_size, SOUND_PCM);
-	btnSoundClick = new GuiSound(button_click_pcm, button_click_pcm_size, SOUND_PCM);
+	btnSoundOver = new GuiSound( Resource( "sounds/button_over.pcm" ), SOUND_PCM);
+	btnSoundClick = new GuiSound( Resource( "sounds/button_click.pcm" ), SOUND_PCM);
 
-	bgFileSelection = new GuiImageData( bg_file_selection_png, bg_file_selection_png_size );
+	bgFileSelection = new GuiImageData( Resource( "images/bg_file_selection.png" ) );
 	bgFileSelectionImg = new GuiImage( bgFileSelection );
 	bgFileSelectionImg->SetParent(this);
 	bgFileSelectionImg->SetAlignment(ALIGN_LEFT | ALIGN_MIDDLE);
 
-	bgFileSelectionEntry = new GuiImageData(bg_file_selection_entry_png, bg_file_selection_entry_png_size );
-	fileFolder = new GuiImageData(folder_png, folder_png_size );
+	bgFileSelectionEntry = new GuiImageData( Resource( "images/bg_file_selection_entry.png" ) );
+	fileFolder = new GuiImageData( Resource( "images/folder.png" ) );
 
-	scrollbar = new GuiImageData(scrollbar_png, scrollbar_png_size );
+	scrollbar = new GuiImageData( Resource( "images/scrollbar_png" ) );
 	scrollbarImg = new GuiImage(scrollbar);
 	scrollbarImg->SetParent(this);
 	scrollbarImg->SetAlignment(ALIGN_RIGHT | ALIGN_TOP);
 	scrollbarImg->SetPosition(0, 30);
 
-	arrowDown = new GuiImageData( scrollbar_arrowdown_png, scrollbar_arrowdown_png_size );
-	arrowDownImg = new GuiImage( arrowDown);
-	arrowDownOver = new GuiImageData( scrollbar_arrowdown_over_png, scrollbar_arrowdown_over_png_size );
+	arrowDown = new GuiImageData( Resource( "images/scrollbar_arrowdown.png" ) );
+	arrowDownImg = new GuiImage( arrowDown );
+	arrowDownOver = new GuiImageData( Resource( "images/scrollbar_arrowdown_over.png" ) );
 	arrowDownOverImg = new GuiImage( arrowDownOver );
-	arrowUp = new GuiImageData(scrollbar_arrowup_png, scrollbar_arrowup_png_size );
+	arrowUp = new GuiImageData( Resource( "images/scrollbar_arrowup.png" ) );
 	arrowUpImg = new GuiImage(arrowUp);
-	arrowUpOver = new GuiImageData(scrollbar_arrowup_over_png, scrollbar_arrowup_over_png_size );
+	arrowUpOver = new GuiImageData( Resource( "images/scrollbar_arrowup_over.png" ) );
 	arrowUpOverImg = new GuiImage(arrowUpOver);
-	scrollbarBox = new GuiImageData(scrollbar_box_png, scrollbar_box_png_size );
+	scrollbarBox = new GuiImageData( Resource( "images/scrollbar_box.png" ) );
 	scrollbarBoxImg = new GuiImage(scrollbarBox);
-	scrollbarBoxOver = new GuiImageData(scrollbar_box_over_png, scrollbar_box_over_png_size );
-	scrollbarBoxOverImg = new GuiImage(scrollbarBoxOver);
+	scrollbarBoxOver = new GuiImageData( Resource( "images/scrollbar_box_over.png" ) );
+	scrollbarBoxOverImg = new GuiImage( scrollbarBoxOver );
 
 	arrowUpBtn = new GuiButton(arrowUpImg->GetWidth(), arrowUpImg->GetHeight());
 	arrowUpBtn->SetParent(this);
@@ -487,8 +467,8 @@ std::string BrowseForEntry( const std::string &browserRoot, const std::string &b
 	fileBrowser.SetAlignment(ALIGN_CENTRE | ALIGN_TOP);
 	fileBrowser.SetPosition(0, 140);
 
-	GuiImageData btnOutline( button_png, button_png_size );
-	GuiImageData btnOutlineOver( button_over_png, button_over_png_size );
+	GuiImageData btnOutline( Resource( "images/button.png" ) );
+	GuiImageData btnOutlineOver( Resource( "images/button_over.png" ) );
 
 	GuiText backBtnTxt( font, "Cancel", 24, GUI_TEXT_COLOR );
 	GuiImage backBtnImg(&btnOutline);
@@ -515,7 +495,7 @@ std::string BrowseForEntry( const std::string &browserRoot, const std::string &b
 	okBtn.SetEffectGrow();
 
 	//path text box
-	GuiImageData keyTextbox( filebrowser_textbox_png, filebrowser_textbox_png_size );
+	GuiImageData keyTextbox( Resource( "images/filebrowser_textbox.png" ) );
 	GuiImage keyTextboxImg( &keyTextbox );
 	keyTextboxImg.SetAlignment( ALIGN_CENTRE | ALIGN_TOP );
 	keyTextboxImg.SetPosition(0, fileBrowser.GetTop() - ( keyTextboxImg.GetHeight() + 4 ) );

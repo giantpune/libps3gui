@@ -22,41 +22,6 @@
 using namespace std;
 extern GuiFont * font;
 
-
-//resource files to include
-INC_FILE( aboutWindow_png );
-INC_FILE( dialogue_box_png );
-INC_FILE( progressbar_outline_png );
-INC_FILE( progressbar_empty_png );
-INC_FILE( progressbar_png );
-
-INC_FILE( background_png );
-INC_FILE( player1_point_png );
-INC_FILE( player2_point_png );
-INC_FILE( player3_point_png );
-INC_FILE( player4_point_png );
-//INC_FILE( font_ttf );
-
-INC_FILE( button_png );
-INC_FILE( button_over_png );
-
-INC_FILE( bg_music_ogg );
-INC_FILE( button_over_wav );
-INC_FILE( button_click_wav );
-INC_FILE( button_click2_wav );
-INC_FILE( button_click_pcm );
-
-INC_FILE( boardSprite_png );
-INC_FILE( redPiece_png );
-INC_FILE( blackPiece_png );
-
-INC_FILE( filebrowser_textbox_png );
-INC_FILE( bottomButtonWindow_png );
-
-INC_FILE( no_ICON0_png );
-
-
-
 //global gui elements
 GuiImageData *bgImgData = NULL;
 GuiImage *bgImage = NULL;
@@ -266,7 +231,6 @@ void exiting()
 		{
 			ResumeGui();                                //make sure the gui thread is not stuck in wait condition before trying to join
 
-			printf("joining gui thread\n");
 			u64 retval;
 			int t = sysThreadJoin( guiThread, &retval );
 			if( t )
@@ -326,17 +290,17 @@ int WindowPrompt(const char *title, const char *msg, const char *btn1Label, cons
     promptWindow.SetAlignment(ALIGN_CENTRE | ALIGN_MIDDLE);
     promptWindow.SetPosition(0, -10);
 	//GuiSound btnSoundOver(button_over_pcm, button_over_pcm_size, SOUND_PCM);
-    GuiImageData btnOutline( button_png, button_png_size );
-    GuiImageData btnOutlineOver( button_over_png, button_over_png_size );
+	GuiImageData btnOutline( Resource( "images/button.png" ) );
+	GuiImageData btnOutlineOver( Resource( "images/button_over.png" ) );
     GuiTrigger trigA;
     trigA.SetSimpleTrigger(-1, BTN_CROSS_ );
 
 	//button sounds
-	GuiSound btnSndOver( button_over_wav, button_over_wav_size, SOUND_WAV );
-	GuiSound btnSndClick2( button_click2_wav, button_click2_wav_size, SOUND_WAV );
+	GuiSound btnSndOver( Resource( "sounds/button_over.wav" ), SOUND_WAV );
+	GuiSound btnSndClick2( Resource( "sounds/button_click2.wav" ), SOUND_WAV );
 	btnSndClick2.SetVolume( 50 );
 
-    GuiImageData dialogBox( dialogue_box_png, dialogue_box_png_size );
+	GuiImageData dialogBox( Resource( "images/dialogue_box.png" ) );
     GuiImage dialogBoxImg(&dialogBox);
 
     GuiText titleTxt( font, title, 26, 0x000000ff );
@@ -436,26 +400,22 @@ void ProgressWindow( const char *title, const char *msg )
 	GuiWindow promptWindow( 448,288 );
 	promptWindow.SetAlignment( ALIGN_CENTRE | ALIGN_MIDDLE );
 	promptWindow.SetPosition( 0, -10 );
-//	GuiSound btnSoundOver(button_over_pcm, button_over_pcm_size, SOUND_PCM);
-//	GuiSound btnSoundClick(button_click_pcm, button_click_pcm_size, SOUND_PCM);
-//    GuiImageData btnOutline( button_png, button_png_size );
-//    GuiImageData btnOutlineOver( button_over_png, button_over_png_size );
 
-	GuiImageData dialogBox( dialogue_box_png, dialogue_box_png_size );
+	GuiImageData dialogBox( Resource( "images/dialogue_box.png" ) );
 	GuiImage dialogBoxImg(&dialogBox);
 
-	GuiImageData progressbarOutline( progressbar_outline_png, progressbar_outline_png_size );
+	GuiImageData progressbarOutline( Resource( "images/progressbar_outline.png" ) );
 	GuiImage progressbarOutlineImg(&progressbarOutline);
 	progressbarOutlineImg.SetAlignment(ALIGN_LEFT | ALIGN_TOP);
 	progressbarOutlineImg.SetPosition(23, 170);
 
-	GuiImageData progressbarEmpty( progressbar_empty_png, progressbar_empty_png_size );
+	GuiImageData progressbarEmpty( Resource( "images/progressbar_empty.png" ) );
 	GuiImage progressbarEmptyImg(&progressbarEmpty);
 	progressbarEmptyImg.SetAlignment(ALIGN_LEFT | ALIGN_TOP);
 	progressbarEmptyImg.SetPosition(23, 170);
 	progressbarEmptyImg.SetTile(100);
 
-	GuiImageData progressbar( progressbar_png, progressbar_png_size );
+	GuiImageData progressbar( Resource( "images/progressbar.png" ) );
 	GuiImage progressbarImg(&progressbar);
 	progressbarImg.SetAlignment(ALIGN_LEFT | ALIGN_TOP);
 	progressbarImg.SetPosition(23, 170);
@@ -546,12 +506,12 @@ int MenuInstall()
 	trigX.SetSimpleTrigger( -1, BTN_CROSS_ );
 
 	//button image
-	GuiImageData btnImgData( button_png, button_png_size );
-	GuiImageData btnImgOverData( button_over_png, button_over_png_size );
+	GuiImageData btnImgData( Resource( "images/button.png" ) );
+	GuiImageData btnImgOverData( Resource( "images/button_over.png" ) );
 
 	//button sound
-	GuiSound btnSndOver( button_over_wav, button_over_wav_size, SOUND_WAV );
-	GuiSound btnSndClick2( button_click2_wav, button_click2_wav_size, SOUND_WAV );
+	GuiSound btnSndOver( Resource( "sounds/button_over.wav" ), SOUND_WAV );
+	GuiSound btnSndClick2( Resource( "sounds/button_click2.wav" ), SOUND_WAV );
 	btnSndClick2.SetVolume( 50 );
 
 	//title text
@@ -667,12 +627,12 @@ int MenuCoverFlow()
 	trigStart.SetButtonOnlyTrigger( 0, BTN_START_ );
 
 	//button image
-	GuiImageData btnImgData( button_png, button_png_size );
-	GuiImageData btnImgOverData( button_over_png, button_over_png_size );
+	GuiImageData btnImgData( Resource( "images/button.png" ) );
+	GuiImageData btnImgOverData( Resource( "images/button_over.png" ) );
 
 	//button sound
-	GuiSound btnSndOver( button_over_wav, button_over_wav_size, SOUND_WAV );
-	GuiSound btnSndClick2( button_click2_wav, button_click2_wav_size, SOUND_WAV );
+	GuiSound btnSndOver( Resource( "sounds/button_over.wav" ), SOUND_WAV );
+	GuiSound btnSndClick2( Resource( "sounds/button_click2.wav" ), SOUND_WAV );
 	btnSndClick2.SetVolume( 50 );
 
 	//title text
@@ -695,7 +655,7 @@ int MenuCoverFlow()
 	int btnTxtY = -5;
 	u32 buttonAlignment = ( ALIGN_TOP | ALIGN_LEFT );
 	//button window
-	GuiImageData bwImgData( bottomButtonWindow_png, bottomButtonWindow_png_size );
+	GuiImageData bwImgData( Resource( "images/bottomButtonWindow.png" ) );
 	GuiImage bwImg( &bwImgData );
 	//append buttons to this window to keep them seperate from the coverflow
 	GuiWindow w( bwImgData.GetWidth(), bwImgData.GetHeight() );
@@ -879,12 +839,12 @@ int MenuSettings()
 	trigX.SetSimpleTrigger( -1, BTN_CROSS_ );
 
 	//button image data
-	GuiImageData btnImgData( button_png, button_png_size );
-	GuiImageData btnImgOverData( button_over_png, button_over_png_size );
+	GuiImageData btnImgData( Resource( "images/button.png" ) );
+	GuiImageData btnImgOverData( Resource( "images/button_over.png" ) );
 
 	//button sounds
-	GuiSound btnSndOver( button_over_wav, button_over_wav_size, SOUND_WAV );
-	GuiSound btnSndClick2( button_click2_wav, button_click2_wav_size, SOUND_WAV );
+	GuiSound btnSndOver( Resource( "sounds/button_over.wav" ), SOUND_WAV );
+	GuiSound btnSndClick2( Resource( "sounds/button_click2.wav" ), SOUND_WAV );
 	btnSndClick2.SetVolume( 50 );
 
 	//title text
@@ -1091,7 +1051,7 @@ int MenuAbout()
 	GuiTrigger trigA;
 	trigA.SetButtonOnlyInFocusTrigger( -1, BTN_CROSS_ );
 
-	GuiImageData dialogBox( aboutWindow_png, aboutWindow_png_size );
+	GuiImageData dialogBox( Resource( "images/aboutWindow.png" ) );
 	GuiImage dialogBoxImg( &dialogBox );
 	dialogBoxImg.SetPosition( -5, -5 );//the image is not centered due to the shadow i included in it
 	dialogBoxImg.SetAlignment( ALIGN_CENTER | ALIGN_MIDDLE );
@@ -1155,14 +1115,15 @@ int MenuAbout()
 int MainMenu( int menu )
 {
 	//create cursors
-	pointer[ 0 ] = new GuiImageData( player1_point_png, player1_point_png_size );
-	pointer[ 1 ] = new GuiImageData( player2_point_png, player2_point_png_size );
-	pointer[ 2 ] = new GuiImageData( player3_point_png, player3_point_png_size );
-	pointer[ 3 ] = new GuiImageData( player4_point_png, player4_point_png_size );
+	pointer[ 0 ] = new GuiImageData( Resource( "images/player1_point.png" ) );
+	pointer[ 1 ] = new GuiImageData( Resource( "images/player2_point.png" ) );
+	pointer[ 2 ] = new GuiImageData( Resource( "images/player3_point.png" ) );
+	pointer[ 3 ] = new GuiImageData( Resource( "images/player4_point.png" ) );
 
 	//create main window, font, background sound, and background
 	mainWindow = new GuiWindow( WINDOW_WIDTH, WINDOW_HEIGHT );
-	bgImgData = new GuiImageData( background_png, background_png_size, TINY3D_TEX_FORMAT_R5G6B5 );
+	//bgImgData = new GuiImageData( background_png, background_png_size, TINY3D_TEX_FORMAT_R5G6B5 );
+	bgImgData = new GuiImageData( Resource( "images/background.png" ), TINY3D_TEX_FORMAT_R5G6B5 );
 	bgImage = new GuiImage( bgImgData );
 	bgImage->SetPosition( 0, 0, 0xffff );
 	bgImage->SetAlignment( ALIGN_CENTER | ALIGN_MIDDLE );
@@ -1175,7 +1136,7 @@ int MainMenu( int menu )
 	font->CacheRange( 0x2122, 0x2122 );	//tm sign
 	font->CacheRange( 0xae, 0xae );		//(R) sign
 
-	bgMusic = new GuiSound( (const u8*)bg_music_ogg, bg_music_ogg_size, SOUND_OGG );
+	bgMusic = new GuiSound( Resource( "sounds/bg_music.ogg" ), SOUND_OGG );
 	bgMusic->SetLoop( true );
 	bgMusic->SetVolume( 10 );
 	bgMusic->Play();

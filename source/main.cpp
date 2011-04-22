@@ -68,7 +68,7 @@ s32 main(s32 argc, const char* argv[])
 	FileBrowser::Init();
 
 	//build list of available resources
-	Resources::Init();
+	Resource::Init();
 
 	//start checking for devices
 	DeviceThread::Init();

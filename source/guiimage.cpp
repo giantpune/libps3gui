@@ -48,6 +48,36 @@ GuiImageData::GuiImageData( const u8 * img, const u32 len, u32 format )
 	}
 }
 
+GuiImageData::GuiImageData( const Resource &resource, u32 format )
+{
+	data = NULL;
+	width = 0;
+	height = 0;
+	rsxOffset = 0xffffffff;
+	wpitch = 0;
+
+	const u8* img = resource.Data();
+	u32 len = resource.Size();
+
+	if( !img || len < 4 )
+		return;
+
+	//load png
+	if( *(u32*)img == 0x89504e47 )//png magic word
+	{
+		LoadPng( img, len, format );
+	}
+	//load jpeg
+	else if( img[ 0 ] == 0xff && img[ 1 ] == 0xd8 && img[ len - 2 ] == 0xff && img[ len - 1 ] == 0xd9 )
+	{
+		LoadJpeg( img, len, format );
+	}
+	else
+	{
+		printf("GuiImageData::GuiImageData(): unrecognized format\n");
+	}
+}
+
 GuiImageData::~GuiImageData()
 {
 	if( data )

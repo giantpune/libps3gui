@@ -40,6 +40,7 @@
 #include "menu.h"
 #include "guifont.h"
 #include "pad.h"
+#include "resources/resources.h"
 #include "video.h"
 #include "wstring.h"
 
@@ -114,7 +115,9 @@ public:
 	//!\param s Pointer to the sound data
 	//!\param l Length of sound data
 	//!\param t Sound format type (SOUND_PCM or SOUND_OGG)
+	//! it makes a copy of the sound internally
 	GuiSound(const u8 * s, int l, int t);
+	GuiSound(const Resource &resource, int t);
 	//!Destructor
 	~GuiSound();
 	//!Start sound playback
@@ -490,11 +493,12 @@ class GuiImageData
 public:
 	//!Constructor
 	//!\param i Image data
-	//! loads raw data such as a buffer containing a png or jpg, allocates memory in rsx, convert teh image to the specified
+	//! loads raw data such as a buffer containing a png or jpg, allocates memory in rsx, convert the image to the specified
 	//! format, and copies it to the rsx memory
 	//! format is the image format to convert to.
 	//! right now, only a8r8g8b8 and r5g6r5 are supported
 	GuiImageData( const u8 * i, const u32 len, u32 format = TINY3D_TEX_FORMAT_A8R8G8B8 );
+	GuiImageData( const Resource &resource, u32 format = TINY3D_TEX_FORMAT_A8R8G8B8 );
 	GuiImageData();
 	//!Destructor
 	~GuiImageData();

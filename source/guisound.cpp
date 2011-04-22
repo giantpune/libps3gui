@@ -37,6 +37,10 @@ INC_FILE( spu_soundmodule_bin );
 GuiSound::GuiSound( const u8 * snd , s32 len, int t )
 {
 	sound = NULL;
+	length = 0;
+	voice = -1;
+	if( !snd || !len )
+		return;
 	switch( t )
 	{
 	case SOUND_PCM://make sure sound data is aligned
@@ -55,7 +59,10 @@ GuiSound::GuiSound( const u8 * snd , s32 len, int t )
 	case SOUND_OGG://format & rate are not used
 	case SOUND_MP3:
 		fd = NULL;
-		sound = (u8*)snd;
+		sound = (u8*)memalign( 32, len );
+		if( !sound )
+			return;
+		memcpy( (void*)sound, (const void*)snd, len );
 		length = len;
 		break;
 	case SOUND_WAV:
@@ -70,7 +77,53 @@ GuiSound::GuiSound( const u8 * snd , s32 len, int t )
 
 
 	type = t;
+	volume = 100;
+	loop = false;
+}
+
+GuiSound::GuiSound(const Resource &resource, int t )
+{
+	sound = NULL;
+	length = 0;
 	voice = -1;
+	if( !resource.Size() || !resource.Data() )
+		return;
+	switch( t )
+	{
+	case SOUND_PCM://make sure sound data is aligned
+		{
+			sound = (u8*)memalign( 32, resource.Size() );
+			if( !sound )
+				return;
+			memcpy( (void*)sound, (const void*)resource.Data(), resource.Size() );
+			fd = NULL;
+			format = VOICE_STEREO_16BIT;
+			rate = 48000;
+			length = resource.Size();
+		}
+		break;
+
+	case SOUND_OGG://format & rate are not used
+	case SOUND_MP3:
+		fd = NULL;
+		sound = (u8*)memalign( 32, resource.Size() );
+		if( !sound )
+			return;
+		memcpy( (void*)sound, (const void*)resource.Data(), resource.Size() );
+		length = resource.Size();
+		break;
+	case SOUND_WAV:
+		{
+			u32 l;
+			sound = DecodeWav( resource.Data(), resource.Size(), &l, &rate, &format );
+			fd = NULL;
+			length = l;
+		}
+		break;
+	}
+
+
+	type = t;
 	volume = 100;
 	loop = false;
 }
@@ -83,8 +136,7 @@ GuiSound::~GuiSound()
 #ifndef NO_SOUND
 	Stop();
 
-	if( ( type == SOUND_PCM || type == SOUND_WAV )
-		&& sound )
+	if( sound )
 		free( (void*)sound );
 #endif
 
@@ -203,6 +255,9 @@ void GuiSound::Resume()
 
 bool GuiSound::IsPlaying()
 {
+	if(voice < 0)
+		return false;
+
 	if( SND_StatusVoice( voice ) == SND_WORKING || SND_StatusVoice( voice ) == SND_WAITING )
 		return true;
 	else

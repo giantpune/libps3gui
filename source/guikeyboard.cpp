@@ -15,24 +15,6 @@
 #include "pad.h"
 #include "utils.h"
 
-INC_FILE( keyboard_backspace_over_png );
-INC_FILE( keyboard_clear_over_png );
-INC_FILE( keyboard_key_png );
-INC_FILE( keyboard_key_over_png );
-INC_FILE( keyboard_largekey_over_png );
-INC_FILE( keyboard_mediumkey_over_png );
-INC_FILE( keyboard_largekey_png );
-INC_FILE( keyboard_mediumkey_png );
-INC_FILE( keyboard_textbox_png );
-
-INC_FILE( button_png );
-INC_FILE( button_over_png );
-
-INC_FILE( button_click_pcm );
-INC_FILE( button_over_pcm );
-INC_FILE( button_over_wav );
-INC_FILE( button_click2_wav );
-
 extern GuiWindow* mainWindow;
 extern GuiFont * font;
 
@@ -66,8 +48,6 @@ GuiKeyboard::GuiKeyboard(char * t, u32 max)
 	selectable = true;
 	focus = 0; // allow focus
 	alignment = ALIGN_CENTRE | ALIGN_MIDDLE;
-	//alignmentHor = ALIGN_CENTRE;
-	//alignmentVert = ALIGN_MIDDLE;
 	strncpy(kbtextstr, t, max);
 	kbtextstr[max] = 0;
 	kbtextmaxlen = max;
@@ -130,7 +110,7 @@ GuiKeyboard::GuiKeyboard(char * t, u32 max)
 	memcpy( keys, thekeys, sizeof( thekeys ) );
 
 
-	keyTextbox = new GuiImageData( keyboard_textbox_png, keyboard_textbox_png_size );
+	keyTextbox = new GuiImageData( Resource( "images/keyboard_textbox.png" ) );
 	keyTextboxImg = new GuiImage( keyTextbox );
 	keyTextboxImg->SetAlignment( ALIGN_CENTRE | ALIGN_TOP );
 	keyTextboxImg->SetPosition(0, 0);
@@ -142,15 +122,15 @@ GuiKeyboard::GuiKeyboard(char * t, u32 max)
     kbText->SetPosition( 0, 10 );
     this->Append(kbText);
 
-	key = new GuiImageData( keyboard_key_png, keyboard_key_png_size );
-	keyOver = new GuiImageData( keyboard_key_over_png, keyboard_key_over_png_size );
-	keyMedium = new GuiImageData( keyboard_mediumkey_png, keyboard_mediumkey_png_size );
-	keyMediumOver = new GuiImageData(keyboard_mediumkey_over_png, keyboard_mediumkey_over_png_size );
-	keyLarge = new GuiImageData( keyboard_largekey_png, keyboard_largekey_png_size );
-    keyLargeOver = new GuiImageData( keyboard_largekey_over_png, keyboard_largekey_over_png_size );
+	key = new GuiImageData( Resource( "images/keyboard_key.png" ) );
+	keyOver = new GuiImageData( Resource( "images/keyboard_key_over.png" ) );
+	keyMedium = new GuiImageData( Resource( "images/keyboard_mediumkey.png" ) );
+	keyMediumOver = new GuiImageData( Resource( "images/keyboard_mediumkey_over.png" ) );
+	keyLarge = new GuiImageData( Resource( "images/keyboard_largekey.png" ) );
+	keyLargeOver = new GuiImageData( Resource( "images/keyboard_largekey_over.png" ) );
 
-	keySoundOver = new GuiSound( button_over_wav, button_over_wav_size, SOUND_WAV );
-	keySoundClick = new GuiSound( button_over_pcm, button_over_pcm_size, SOUND_PCM );
+	keySoundOver = new GuiSound( Resource( "sounds/button_over.wav" ), SOUND_WAV );
+	keySoundClick = new GuiSound( Resource( "sounds/button_over.pcm" ), SOUND_PCM );
 	keySoundClick->SetVolume( 50 );
     trigA = new GuiTrigger;
     trigSQ = new GuiTrigger;
@@ -409,12 +389,12 @@ void OnScreenKeyboard( char * var, u16 maxlen )
 	GuiKeyboard keyboard( var, maxlen );
 
 	//button sound
-	GuiSound btnSndOver( button_over_wav, button_over_wav_size, SOUND_WAV );
-	GuiSound btnSndClick2( button_click2_wav, button_click2_wav_size, SOUND_WAV );
+	GuiSound btnSndOver( Resource( "sounds/button_over.wav" ), SOUND_WAV );
+	GuiSound btnSndClick2( Resource( "sounds/button_click2.wav" ), SOUND_WAV );
 	btnSndClick2.SetVolume( 50 );
 
-	GuiImageData btnOutline( button_png, button_png_size );
-	GuiImageData btnOutlineOver( button_over_png, button_over_png_size );
+	GuiImageData btnOutline( Resource( "images/button.png" ) );
+	GuiImageData btnOutlineOver( Resource( "images/button_over.png" ) );
 	GuiTrigger trigA;
 	trigA.SetSimpleTrigger(-1, BTN_CROSS_ );
 
