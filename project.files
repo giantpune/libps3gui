@@ -113,3 +113,7 @@ source/resources/resources.h
 source/resources/resources.cpp
 source/resources/resourcelist.h
 source/resources/resourcelist.cpp
+source/network/dns.h
+source/network/dns.cpp
+source/network/network.h
+source/network/network.cpp

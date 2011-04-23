@@ -25,14 +25,11 @@ Game::Game()
 Game::Game( const string &path )
 {
 	ok = false;
-//	iconData = NULL;
 	Load( path );
 }
 
 Game::~Game()
 {
-	//if( iconData )
-	//	delete iconData;
 }
 
 void Game::Load( const string &path )
@@ -45,7 +42,6 @@ void Game::Load( const string &path )
 	u32 sfoSize;
 	u32 pos;
 	u32 str;
-//	u32 imageSize = 0;
 
 	u32 indx = 0;
 
@@ -87,13 +83,7 @@ void Game::Load( const string &path )
 	if( name.empty() )
 		MakeNameFromPath();
 
-	//u64 totalSize = FileOps::FileSize( this->path );
-	//float gbSize = (float)totalSize/(float)GiB;
-
 	cout << "id: " << id << "\ttitle: " << name.toUTF8() << endl;//"\tpath: " << this->path << endl;//"\t" << gbSize << endl;
-	//Sfo sfo( this->Path() + "PS3_GAME/PARAM.SFO" );
-	//sfo.Print();
-
 	ok = ( !name.empty() && !id.empty() );
 }
 
@@ -126,14 +116,17 @@ bool listDirty = false;
 
 void Get( const vector<string> &devices )
 {
-	cout << "Get()" << endl;
+	//cout << "Get()" << endl;
 	vector<string>::const_iterator device = devices.begin();
 	while( device < devices.end() )
 	{
-		//cout << "derp: \"" << (*device) + "/GAMES/\"" << endl;
 		if( FileOps::Exists( (*device) + "/GAMES/" ) )
 		{
 			AddFromPath( (*device) + "/GAMES/" );
+		}
+		if( FileOps::Exists( (*device) + "/GAMEZ/" ) )
+		{
+			AddFromPath( (*device) + "/GAMEZ/" );
 		}
 		++device;
 	}

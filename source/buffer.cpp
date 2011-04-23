@@ -5,11 +5,10 @@
 #include "buffer.h"
 #include "utils.h"
 
-Buffer::Buffer( const u8* stuff, u32 size )
+Buffer::Buffer( const u8* stuff, u32 size ) : ptr( NULL ), len( 0 )
 {
-	ptr = NULL;
-	len = 0;
-	SetData( stuff, size );
+	if( stuff )
+		SetData( stuff, size );
 }
 
 Buffer::Buffer( u32 size )
@@ -33,8 +32,10 @@ Buffer::Buffer( const Buffer &other )
 
 Buffer::~Buffer()
 {
+	//printf("~Buffer()   ptr: %p\n", ptr );
 	if( ptr )
 		free( ptr );
+	//printf("~Buffer()   done\n" );
 }
 
 void Buffer::Free()
@@ -139,7 +140,6 @@ Buffer &Buffer::Resize( u32 size )
 {
 	if( !size )
 	{
-		printf("!size\n");
 		Free();
 		return *this;
 	}

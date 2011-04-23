@@ -164,6 +164,36 @@ bool WriteFile( const std::string &path, const u8* stuff, u32 size )
 	return true;
 }
 
+bool WriteFile( const std::string &path, const Buffer &buf )
+{
+	s32 fd;
+	int i;
+	u64 written;
+
+	i = sysFsOpen( path.c_str(), SYS_O_WRONLY | SYS_O_CREAT | SYS_O_TRUNC, &fd, NULL, 0 );
+	if( i )
+	{
+		printf("sysFsOpen( %s ): %i\n", path.c_str(), i );
+		return false;
+	}
+	i = sysFsWrite( fd, (void*)buf.ConstData(), buf.Size(), &written );
+	if( i )
+	{
+		sysFsClose( fd );
+		sysFsUnlink( path.c_str() );
+		printf("sysFsWrite( %s ): %i\n", path.c_str(), i );
+		return false;
+	}
+	sysFsClose( fd );
+	if( written != buf.Size() )
+	{
+		printf("WriteFile() failed to write all the data to \"%s\"\n", path.c_str() );
+		sysFsUnlink( path.c_str() );
+		return false;
+	}
+	return true;
+}
+
 std::vector<std::string> ReadDir( const std::string &path, u32 flags )
 {
 	int i;

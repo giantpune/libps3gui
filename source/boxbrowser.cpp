@@ -353,11 +353,11 @@ void BoxBrowser::CreateMaxtrices()
 {
 	mtxBox.clear();
 
-	float zoom1 = 405.0f;
-	float zoom2 = 405.0f;
-	float zoom3 = 405.0f;
-	float zoom4 = 405.0f;
-	float zoom5 = 405.0f;
+	float zoom1 = 395.0f;// lol.  theres probably a better way to do it than to scale the whole matrix.
+	float zoom2 = 395.0f;// but this is working for now.
+	float zoom3 = 395.0f;
+	float zoom4 = 395.0f;
+	float zoom5 = 395.0f;
 
 	float posY1 = 362.0f;
 	float posY2 = 362.0f;
@@ -413,7 +413,6 @@ void BoxBrowser::CreateMaxtrices()
 	//create left matrices
 	for( int i = 0; i < sideFrames; i++ )
 	{
-		//CreateMatrix( int idx, float xpos, float ypos, float zpos, float xrot, float yrot, float zrot, float scale )
 		int rotx, roty, rotz, posx, posy, posz;
 		float scale;
 
@@ -480,7 +479,6 @@ void BoxBrowser::CreateMaxtrices()
 	//create right matrices
 	for( int i = 0; i < sideFrames; i++ )
 	{
-		//CreateMatrix( int idx, float xpos, float ypos, float zpos, float xrot, float yrot, float zrot, float scale )
 		int rotx, roty, rotz, posx, posy, posz;
 		float scale;
 
@@ -491,10 +489,8 @@ void BoxBrowser::CreateMaxtrices()
 		posx = ( selectedX + rightAdjXpos + ( spacingCenter + ( right * spacingSidesMtx ) ) );
 		posy = ( posY4 + ( right * ( posY5 - posY4 ) / sideFrames ) );
 		posz = ( posZ4 + ( right * ( posZ5 - posZ4 ) / sideFrames ) );
-		//posz = 600.0f;
 
 		scale = ( zoom4 + ( right * ( zoom5 - zoom4 ) / sideFrames ) );
-		//scale = 42.0f;
 		++right;
 
 		CreateMatrix( posx, posy, posz, rotx, roty, rotz, scale );

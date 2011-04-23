@@ -30,6 +30,7 @@ Buffer ReadFileToBuffer( const std::string &path );
 //! truncates the original file or creates it new
 //! returns true if all the data was able to be written, otherwise false
 bool WriteFile( const std::string &path, const u8* stuff, u32 size );
+bool WriteFile( const std::string &path, const Buffer &buf );
 
 
 #define DIR_SKIP_DOT			1			//dont include "."

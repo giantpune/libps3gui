@@ -14,6 +14,7 @@
 #include "gui.h"
 #include "guiimageasync.h"
 #include "menu.h"
+#include "network/network.h"
 #include "pad.h"
 #include "settings.h"
 #include "stringstuff.h"
@@ -395,6 +396,7 @@ int WindowPrompt(const char *title, const char *msg, const char *btn1Label, cons
     return choice;
 }
 
+#if 0
 void ProgressWindow( const char *title, const char *msg )
 {
 	GuiWindow promptWindow( 448,288 );
@@ -471,10 +473,9 @@ void ProgressWindow( const char *title, const char *msg )
 	mainWindow->SetState(oldState);
 	ResumeGui();
 }
-
+#endif
 void MenuRender()
 {
-	//tiny3d_Flip();
 	MenuPrepareToDraw();
 
 	//draw main window
@@ -635,18 +636,6 @@ int MenuCoverFlow()
 	GuiSound btnSndClick2( Resource( "sounds/button_click2.wav" ), SOUND_WAV );
 	btnSndClick2.SetVolume( 50 );
 
-	//title text
-	char t[ MAX_KEYBOARD_DISPLAY + 1 ];
-	strncpy( t, "Pune Warez", MAX_KEYBOARD_DISPLAY );
-
-	//wString stuff;
-	//stuff.fromUTF8( "大乱闘スマッシュブラザーズX™" );
-	//GuiText titleTxt( font, stuff, 32, GUI_TEXT_COLOR );
-	GuiText titleTxt( font,(char*)NULL, 32, GUI_TEXT_COLOR );
-//	titleTxt.SetText( stuff.c_str() );
-	titleTxt.SetPosition( 0, 0 );
-	titleTxt.SetAlignment( ALIGN_TOP | ALIGN_CENTER );
-
 	int buttonTop = 20;
 	int buttonLeft = 35;
 	int buttonX = buttonLeft;
@@ -723,10 +712,8 @@ int MenuCoverFlow()
 
 	if( ListContains( devs, "/dev_bdvd" ) )
 		w.Append( &installBtn );
-	//w.Append( &installBtn );
 	w.Append( &optionBtn );
 	w.Append( &exitBtn );
-	coverflow.Append( &titleTxt );
 
 	HaltGui();
 	mainWindow->Append( &coverflow );
@@ -918,8 +905,6 @@ int MenuSettings()
 	{
 
 		int cl = optionBrowser->GetClickedOption();
-		//if( cl > -1 )
-		//	printf("cl: %i  page: %i\n", cl, page );
 		switch( page )
 		{
 		case 0://we are on the main option page
@@ -1042,76 +1027,6 @@ int MenuSettings()
 
 }
 
-int MenuAbout()
-{
-	GuiWindow promptWindow( WINDOW_WIDTH, WINDOW_HEIGHT );
-	promptWindow.SetAlignment( ALIGN_CENTRE | ALIGN_MIDDLE );
-
-
-	GuiTrigger trigA;
-	trigA.SetButtonOnlyInFocusTrigger( -1, BTN_CROSS_ );
-
-	GuiImageData dialogBox( Resource( "images/aboutWindow.png" ) );
-	GuiImage dialogBoxImg( &dialogBox );
-	dialogBoxImg.SetPosition( -5, -5 );//the image is not centered due to the shadow i included in it
-	dialogBoxImg.SetAlignment( ALIGN_CENTER | ALIGN_MIDDLE );
-
-	GuiText titleTxt( font, "libps3gui demo", 30, 0x000000ff  );
-	titleTxt.SetAlignment(ALIGN_CENTRE| ALIGN_TOP);
-	titleTxt.SetPosition( 0,40 );
-
-
-	char msg[ 2048 ];
-	snprintf( msg, sizeof( msg ), \
-			  "This is a quick demo for libps3gui.  The library is based off libwiigui ((c) Tantric 2009).  "\
-			  "This ps3 port is done by giantpune, including code from hermes and dimok.  "\
-			  "It uses tiny3d for drawing.  Controller input and drawing is done on 1 thread.  "\
-			  "Sound is played via hermes\' spu module and the background music is being converted from ogg "\
-			  "to pcm on a thread.  The API is very similar to libwiigui.  "\
-			  "The connect 4 game engine is written by Keith Pomakis.  "\
-			  "This code is licensed under the GPLv2 license.");
-	GuiText msgTxt( font, msg, 24, 0x000000ff );
-	msgTxt.SetAlignment( ALIGN_CENTER | ALIGN_TOP );
-	msgTxt.SetPosition( 0, 120 );
-	msgTxt.SetWrap( true, dialogBoxImg.GetWidth() - 50 );
-
-
-	GuiButton btn1( 0, 0 );
-	btn1.SetTrigger( &trigA );
-
-
-	promptWindow.Append( &dialogBoxImg );
-	promptWindow.Append( &titleTxt );
-	promptWindow.Append( &msgTxt );
-	promptWindow.Append( &btn1 );
-
-	promptWindow.SetEffect(EFFECT_SLIDE_TOP | EFFECT_SLIDE_IN, 50);
-	HaltGui();
-	mainWindow->SetState(STATE_DISABLED);
-	mainWindow->Append(&promptWindow);
-	mainWindow->ChangeFocus(&promptWindow);
-	ResumeGui();
-
-	while( 1 )
-	{
-		usleep( THREAD_SLEEP );
-
-		if( btn1.GetState() == STATE_CLICKED )
-			break;
-	}
-
-	//slide window off the screen
-	promptWindow.SetEffect(EFFECT_SLIDE_TOP | EFFECT_SLIDE_OUT, 50);
-	while( promptWindow.GetEffect() > 0 )
-		usleep(THREAD_SLEEP);
-
-	HaltGui();
-	mainWindow->Remove(&promptWindow);
-	mainWindow->SetState(STATE_DEFAULT);
-	ResumeGui();
-	return MENU_COVERFLOW;
-}
-
 int MainMenu( int menu )
 {
 	//create cursors
@@ -1122,13 +1037,10 @@ int MainMenu( int menu )
 
 	//create main window, font, background sound, and background
 	mainWindow = new GuiWindow( WINDOW_WIDTH, WINDOW_HEIGHT );
-	//bgImgData = new GuiImageData( background_png, background_png_size, TINY3D_TEX_FORMAT_R5G6B5 );
 	bgImgData = new GuiImageData( Resource( "images/background.png" ), TINY3D_TEX_FORMAT_R5G6B5 );
 	bgImage = new GuiImage( bgImgData );
 	bgImage->SetPosition( 0, 0, 0xffff );
 	bgImage->SetAlignment( ALIGN_CENTER | ALIGN_MIDDLE );
-	//font = new GuiFont( SCE_PS3_NR_R_JPN );
-	//font = new GuiDualFont( SCE_PS3_VR_R_LATIN2 );
 	font = new GuiDualFont();
 
 	//store characters commonly found in titles up front to avoid fragmenting the rsx memory
@@ -1153,9 +1065,6 @@ int MainMenu( int menu )
 		{
 		case MENU_SETTINGS:
 			menu = MenuSettings();
-			break;
-		case MENU_ABOUT:
-			menu = MenuAbout();
 			break;
 		default:
 		case MENU_COVERFLOW:

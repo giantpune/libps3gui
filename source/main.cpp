@@ -24,6 +24,7 @@
 #include "gui.h"
 #include "pad.h"
 #include "menu.h"
+#include "network/network.h"
 #include "resources/resources.h"
 #include "rsxmem.h"
 #include "settings.h"
@@ -69,6 +70,9 @@ s32 main(s32 argc, const char* argv[])
 
 	//build list of available resources
 	Resource::Init();
+
+	//init network
+	Network::Init();
 
 	//start checking for devices
 	DeviceThread::Init();

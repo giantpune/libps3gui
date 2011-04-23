@@ -22,6 +22,7 @@ RESOURCES	:=  source/images \
 				source/sounds
 SOURCES		:=	source \
 				source/resources \
+				source/network \
 				$(RESOURCES)
 DATA		:=	data
 INCLUDES	:=	include
@@ -46,7 +47,8 @@ LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
 AUDIOLIBS	:=  -lspu_sound -laudioplayer -lmpg123 -lvorbisfile -lvorbis -logg -laudio -lspu_soundmodule.bin
-LIBS	:=	$(AUDIOLIBS) -ltiny3d -lfreetype -lz -lrsx -lgcm_sys -lio -lsysutil -lrt -llv2 -lm -lsysfs -lpngdec -ljpgdec -lsysmodule
+LIBS	:=	$(AUDIOLIBS) -ltiny3d -lfreetype -lz -lrsx -lgcm_sys -lio -lsysutil -lrt -llv2 -lm -lsysfs \
+			-lpngdec -ljpgdec -lsysmodule -lnet
 
 LIBDIRS	:=	$(PORTLIBS)
 
